@@ -1,11 +1,5 @@
 <?php
-require('config/db.php');
-
-$sql = "SELECT * FROM genres";
-$req = $bdd->prepare($sql);
-$req->execute(array($code));
-if($req) {
-    while ($row = $req->fetch()):
+require('db.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,14 +9,40 @@ if($req) {
 	<title>List genre</title>
 </head>
 <body>
-
-<label for="genre">Quel est votre genre de film préféré?</label>
+<form action="recherche.php" method="post">
+<label for="genre">Quel est votre genre de film préféré ?</label>
 <select name="genre" id="genre">
 <?php
-    $liste_genres = $bdd->prepare("SELECT * FROM genres");
-	$liste_genres->execute();
-	while ($res = $liste_genres->fetch(PDO::FETCH_ASSOC)) {
-		echo "<option>" . $res["nom_genre"] . "</option>";
+    $req = $bdd->prepare("SELECT * FROM genres");
+	$req->execute();
+	while ($res_genre = $req->fetch(PDO::FETCH_ASSOC)) {
+		echo "<option>" . $res_genre["nom_genre"] . "</option>";
+	}
+?>
+</select>
+
+<br><br>
+
+<label for="prod_c">Quel est votre maison de production favorite ?</label>
+<select name="prod_c" id="prod_c">
+<?php
+    $req = $bdd->prepare("SELECT * FROM prod_compagnie");
+	$req->execute();
+	while ($res_prod_c = $req->fetch(PDO::FETCH_ASSOC)) {
+		echo "<option>" . $res_prod_c["nom_prod_c"] . "</option>";
+	}
+?>
+</select>
+
+<br><br>
+
+<label for="prod">Quel est votre producteur favori ?</label>
+<select name="prod" id="prod">
+<?php
+    $req = $bdd->prepare("SELECT * FROM producteurs");
+	$req->execute();
+	while ($res_prod = $req->fetch(PDO::FETCH_ASSOC)) {
+		echo "<option>" . $res_prod["nom_prod"] . "</option>";
 	}
 ?>
 </select>
@@ -34,11 +54,10 @@ if($req) {
 
 <br><br>
 
-<button type="button">Rechercher</button>
-
+<button type="submit">Rechercher</button>
+</form>
 </body>
 </html>
 <?php
 $req->closeCursor();
-}
 ?>
