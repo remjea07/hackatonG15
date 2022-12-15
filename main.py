@@ -46,11 +46,11 @@ def sort_list_films_by_genre(list_films: list[str], genres: list[str]) -> list[s
     return final_list_films
 
 
-def sort_list_films(list_films: list[str], genres: list[str]=None, tag: str=None) -> list[str]:
-    if tag != None:
+def sort_list_films(list_films: list[str], genres: list[str], tag: str) -> list[str]:
+    if tag != "null":
         list_films = get_films_with_tag_or_titre(list_films, tag)
     list_films = sort_list_films_by_popularity(list_films)
-    if genres != None:
+    if genres != "null":
         list_films = sort_list_films_by_genre(list_films, genres)
     return list_films
 
@@ -61,5 +61,5 @@ if __name__ == "__main__":
         tag = sys.argv[-1]
         list_films = get_films(file, genres)
         list_films = sort_list_films(list_films, genres, tag)
-        #for film in list_films:
-        #    print(film)
+        for film in list_films:
+            print(film)
