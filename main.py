@@ -1,5 +1,5 @@
-#usr/bin/python
 import csv
+import sys
 
 
 def get_films_with_tag_or_titre(list_films: list[str], tag: str) -> list[str]:
@@ -55,8 +55,11 @@ def sort_list_films(list_films: list[str], genres: list[str]=None, tag: str=None
     return list_films
 
 
-with open("tmdb_5000_movies.csv", "r") as file:
-    list_films = get_films(file, ["Action", "Drama"])
-    list_films = sort_list_films(list_films, ["Action", "Drama"], 'party')
-    for film in list_films:
-        print(film)
+if __name__ == "__main__":
+    with open("tmdb_5000_movies.csv", "r") as file:
+        genres = [genre for genre in sys.argv[1:-1]]
+        tag = sys.argv[-1]
+        list_films = get_films(file, genres)
+        list_films = sort_list_films(list_films, genres, tag)
+        #for film in list_films:
+        #    print(film)
