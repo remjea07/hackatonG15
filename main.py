@@ -9,9 +9,6 @@ def get_number_genres_in_film(film: str, genres: list[str]) -> int:
     return result
 
 
-
-
-
 def sort_list_films(list_films: list[str], genres: list[str]) -> list[str]:
     number_genres_in_film = {i + 1: [] for i in range(len(genres))}
     for film in list_films:
