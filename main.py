@@ -36,4 +36,4 @@ with open("tmdb_5000_movies.csv", "r") as file:
     list_films = get_films(file, ["Action", "Drama"])
     list_films = sort_list_films(list_films, ["Action", "Drama"])
     for film in list_films:
-        print(film[8])
+        print(film)
