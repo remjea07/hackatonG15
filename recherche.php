@@ -1,18 +1,16 @@
 <head>
 	<title>Recherche de films</title>
 </head>
-<?php require "db.php";
-include "main.py";
+<?php
+$genres = $_POST['genre'];
+ob_start();
 
-try {
-	$genre = $_POST['genre'];
-	$test = shell_exec("python3 main.py Action Drama Party");
-	echo $test;
+$url = 'http://localhost:5000/'.$genres;
+
+while (ob_get_status()) 
+{
+    ob_end_clean();
 }
-//Affichage de l'erreur s'il y en a une
-catch(PDOException $e) {
-	$message = "Échec de la connexion : " . $e->getMessage();
-	echo $message;
-}
-$bdd = null;
+
+header( "Location: $url" );
 ?>

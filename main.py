@@ -1,6 +1,20 @@
+from flask import Flask
+from flask import request
 import csv
 import sys
 
+app = Flask(__name__)
+
+@app.route("/<genres>")
+def main(genres):
+    films = ""
+    with open("tmdb_5000_movies.csv", "r", encoding='utf8') as file:
+        tag = ""
+        list_films = get_films(file, genres)
+        list_films = sort_list_films_by_genre(list_films, genres)
+        for film in list_films[:10]:
+            films += film[6] + "<br>"
+    return films
 
 def get_films_with_tag_or_titre(list_films: list[str], tag: str) -> list[str]:
     tag = tag.lower()
@@ -56,10 +70,4 @@ def sort_list_films(list_films: list[str], genres: list[str], tag: str) -> list[
 
 
 if __name__ == "__main__":
-    with open("tmdb_5000_movies.csv", "r") as file:
-        genres = [genre for genre in sys.argv[1:-1]]
-        tag = sys.argv[-1]
-        list_films = get_films(file, genres)
-        list_films = sort_list_films(list_films, genres, tag)
-        for film in list_films:
-            print(film)
+    app.run(host='0.0.0.0', port=5000, debug=True)
