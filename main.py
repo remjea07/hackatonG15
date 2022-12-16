@@ -5,14 +5,14 @@ import sys
 
 app = Flask(__name__)
 
-@app.route("/<genres>")
-def main(genres):
+@app.route("/<genres>/<tag>")
+def main(genres,tag):
     films = ""
     with open("tmdb_5000_movies.csv", "r", encoding='utf8') as file:
-        tag = ""
+        genres = genres.split(',')
         list_films = get_films(file, genres)
-        list_films = sort_list_films_by_genre(list_films, genres)
-        for film in list_films[:10]:
+        list_films = sort_list_films(list_films, genres, tag)
+        for film in list_films[:20]:
             films += film[6] + "<br>"
     return films
 
@@ -60,12 +60,23 @@ def sort_list_films_by_genre(list_films: list[str], genres: list[str]) -> list[s
     return final_list_films
 
 
+def sort_list_films_by_votes(list_films: list[str]) -> list[str]:
+    if len(list_films) < 2:
+        return list_films
+    else:
+        return sort_list_films_by_votes([film for film in list_films if float(film[-2]) > float(list_films[0][-2])]) + \
+               [list_films[0]] + \
+               sort_list_films_by_votes([film for film in list_films if float(film[-2]) < float(list_films[0][-2])])
+
+
 def sort_list_films(list_films: list[str], genres: list[str], tag: str) -> list[str]:
     if tag != "null":
         list_films = get_films_with_tag_or_titre(list_films, tag)
-    list_films = sort_list_films_by_popularity(list_films)
     if genres != "null":
         list_films = sort_list_films_by_genre(list_films, genres)
+
+    list_films = sort_list_films_by_votes(list_films)
+    list_films = sort_list_films_by_popularity(list_films)
     return list_films
 
 
